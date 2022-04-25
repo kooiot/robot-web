@@ -21,6 +21,16 @@ const frameIn = [
         },
         component: _import('system/index')
       },
+      // Robot页面
+      {
+        path: 'robot',
+        name: 'robot',
+        meta: {
+          title: 'Robot Admin',
+          auth: true
+        },
+        component: _import('robot/index')
+      },
       // 演示页面
       {
         path: 'page1',
