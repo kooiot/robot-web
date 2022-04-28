@@ -26,6 +26,41 @@
         </div>
 
         <div class="cs-card">
+          <el-table
+            :data="onlineClients"
+            :header-cell-style="{padding: '8px 0'}"
+            class="table-card">
+            <el-table-column
+              prop="id"
+              label="ID"
+              width="120">
+            </el-table-column>
+
+            <el-table-column
+              label="Client ID"
+              show-overflow-tooltip>
+              <template slot-scope="scope">
+                <span
+                  @click="handleView(scope.row.info.client_id)"
+                  class="goods-link">{{scope.row.info.client_id}}</span>
+              </template>
+            </el-table-column>
+
+            <el-table-column
+              prop="online"
+              label="登入时间"
+              width="200">
+            </el-table-column>
+
+            <el-table-column
+              prop="count"
+              label="状态"
+              width="100">
+            </el-table-column>
+          </el-table>
+        </div>
+
+        <div class="cs-card">
           <i class="el-icon-collection-tag d2-pb">
             <span class="d2-pl-5">今日测试量</span>
           </i>
@@ -36,6 +71,8 @@
             :settings="{labelMap: {success: '成功量合计', fail: '失败量合计'}}"
             :data-empty="!runToday.rows.length"/>
         </div>
+
+<!--
         <div class="cs-card">
           <i class="el-icon-collection-tag d2-pb">
             <span class="d2-pl-5">今日活跃会员</span>
@@ -46,7 +83,7 @@
             :colors="colors"
             :settings="{labelMap: {count: '活跃数合计'}}"
             :data-empty="!clientActive.rows.length"/>
-        </div>
+        </div> -->
 
         <el-table
           :data="errorTop"
@@ -63,14 +100,14 @@
             show-overflow-tooltip>
             <template slot-scope="scope">
               <span
-                @click="handleView(scope.row.goods_id)"
+                @click="handleView(scope.row.name)"
                 class="goods-link">{{scope.row.name}}</span>
             </template>
           </el-table-column>
 
           <el-table-column
-            prop="sales_sum"
-            label="销售量"
+            prop="count"
+            label="数量"
             align="center"
             width="100">
           </el-table-column>
@@ -150,14 +187,15 @@
 
         <div class="cs-card">
           <i class="el-icon-collection-tag d2-pb">
-            <span class="d2-pl-5">订单来源</span>
+            <span class="d2-pl-5">错误统计</span>
           </i>
           <ve-pie
-            :data="orderSource"
-            :data-empty="!orderSource.rows.length"
+            :data="errorStats"
+            :data-empty="!errorStats.rows.length"
             :colors="colors"/>
         </div>
 
+      <!--
         <div class="cs-card">
           <i class="el-icon-collection-tag d2-pb">
             <span class="d2-pl-5">会员等级</span>
@@ -167,7 +205,7 @@
             :data="clientLevel"
             :data-empty="!clientLevel.rows.length"
             :colors="colors"/>
-        </div>
+        </div> -->
       </el-col>
     </el-row>
   </div>
@@ -181,8 +219,8 @@ import 'v-charts/lib/style.css'
 export default {
   components: {
     VeLine: () => import('v-charts/lib/line.common'),
-    VePie: () => import('v-charts/lib/pie.common'),
-    VeRing: () => import('v-charts/lib/ring.common')
+    VePie: () => import('v-charts/lib/pie.common')
+    // VeRing: () => import('v-charts/lib/ring.common')
   },
   data () {
     return {
@@ -196,7 +234,7 @@ export default {
         columns: ['hour', 'count'],
         rows: []
       },
-      orderSource: {
+      errorStats: {
         columns: ['name', 'count'],
         rows: []
       },
@@ -204,6 +242,7 @@ export default {
         columns: ['name', 'count'],
         rows: []
       },
+      onlineClients: [],
       errorTop: [],
       testStatus: {
         today: {},
@@ -234,11 +273,12 @@ export default {
           console.log(res)
           if (data) {
             this.updateTime = data.update_time
-            // this.runToday.rows = data.run_today
+            this.runToday.rows = data.run_today
             this.clientActive.rows = data.client_active
-            this.orderSource.rows = data.order_source
+            this.errorStats.rows = data.error_stats
             this.clientLevel.rows = data.client_level
             this.errorTop = data.error_top.slice(0, 6)
+            this.onlineClients = data.clients
             this.testStatus = data.test_status
             this.serverStatus = data.server_status
           }

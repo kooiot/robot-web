@@ -18,10 +18,10 @@ function supplementPath (menu) {
 export const menuHeader = supplementPath([
   { path: '/index', title: '首页', icon: 'home' },
   {
-    title: 'Robot Admin',
+    title: '任务自动化',
     icon: 'folder-o',
     children: [
-      { path: '/robot', title: 'Dashboard' }
+      { path: '/robot', title: '仪表盘' }
     ]
   },
   {
@@ -38,10 +38,10 @@ export const menuHeader = supplementPath([
 export const menuAside = supplementPath([
   { path: '/index', title: '首页', icon: 'home' },
   {
-    title: 'Robot Admin',
+    title: '任务自动化',
     icon: 'folder-o',
     children: [
-      { path: '/robot', title: 'Dashboard' }
+      { path: '/robot', title: '仪表盘' }
     ]
   },
   {

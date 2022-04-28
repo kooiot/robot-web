@@ -26,7 +26,7 @@ const frameIn = [
         path: 'robot',
         name: 'robot',
         meta: {
-          title: 'Robot Admin',
+          title: '任务自动化',
           auth: true
         },
         component: _import('robot/index')

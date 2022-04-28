@@ -17,7 +17,7 @@
     "core-js": "^3.4.3",
     "countup.js": "^2.1.0",
     "dayjs": "^1.8.17",
-    "echarts": "^5.3.2",
+    "echarts": "^4.9.0",
     "element-ui": "^2.15.6",
     "faker": "^4.1.0",
     "flex.css": "^1.1.7",
