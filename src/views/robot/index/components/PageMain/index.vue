@@ -41,7 +41,7 @@
               show-overflow-tooltip>
               <template slot-scope="scope">
                 <span
-                  @click="handleView(scope.row.info.client_id)"
+                  @click="handleView(scope.row.id)"
                   class="goods-link">{{scope.row.info.client_id}}</span>
               </template>
             </el-table-column>
@@ -157,7 +157,7 @@
                 <cs-count-up
                   class="cs-sales__number"
                   :end="testStatus.today.fail"
-                  :decimals="2"/>
+                  :decimals="0"/>
               </td>
             </tr>
 
@@ -178,7 +178,7 @@
                 <cs-count-up
                   class="cs-sales__number"
                   :end="testStatus.total.fail"
-                  :decimals="2"/>
+                  :decimals="0"/>
               </td>
             </tr>
             </tbody>
@@ -224,6 +224,7 @@ export default {
   },
   data () {
     return {
+      timer: null,
       colors,
       updateTime: '',
       runToday: {
@@ -264,21 +265,24 @@ export default {
   },
   mounted () {
     this.handleSubmit()
+    // this.timer = setInterval(() => { this.handleSubmit() }, 2000)
+  },
+  beforeDestroy () {
+    clearInterval(this.timer)
   },
   methods: {
     handleSubmit () {
       api.ROBOT_STATS({ type: 'index' })
         .then(res => {
           const data = res
-          console.log(res)
           if (data) {
             this.updateTime = data.update_time
-            this.runToday.rows = data.run_today
-            this.clientActive.rows = data.client_active
-            this.errorStats.rows = data.error_stats
-            this.clientLevel.rows = data.client_level
-            this.errorTop = data.error_top.slice(0, 6)
-            this.onlineClients = data.clients
+            this.runToday.rows = data.run_today ? data.run_today : []
+            this.clientActive.rows = data.client_active ? data.client_active : []
+            this.errorStats.rows = data.error_stats ? data.error_stats : []
+            this.clientLevel.rows = data.client_level ? data.client_level : []
+            this.errorTop = data.error_top ? data.error_top.slice(0, 6) : []
+            this.onlineClients = data.clients ? data.clients : []
             this.testStatus = data.test_status
             this.serverStatus = data.server_status
           }
@@ -287,10 +291,10 @@ export default {
     handleOpen (name) {
       this.$router.push({ name })
     },
-    handleView (goodsId) {
+    handleView (clientId) {
       this.$router.push({
-        name: 'goods-admin-view',
-        params: { goodsId }
+        name: 'robot-detail',
+        params: { client_id: clientId }
       })
     },
     handleRefresh () {

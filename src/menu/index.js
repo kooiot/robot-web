@@ -21,7 +21,7 @@ export const menuHeader = supplementPath([
     title: '任务自动化',
     icon: 'folder-o',
     children: [
-      { path: '/robot', title: '仪表盘' }
+      { path: '/robot/dashboard', title: '仪表盘' }
     ]
   },
   {
@@ -41,7 +41,7 @@ export const menuAside = supplementPath([
     title: '任务自动化',
     icon: 'folder-o',
     children: [
-      { path: '/robot', title: '仪表盘' }
+      { path: '/robot/dashboard', title: '仪表盘' }
     ]
   },
   {
